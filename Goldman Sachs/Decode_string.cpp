@@ -1,51 +1,111 @@
-#include <iostream>
-#include <stack>
-#include <string>
+// { Driver Code Starts
+// Initial Template for C++
 
+#include <bits/stdc++.h>
 using namespace std;
 
+ // } Driver Code Ends
+// User function Template for C++
+
+class Solution{
+public:
+    string decodedString(string str){
+
+    stack<int> integerstack;
+    stack<char> stringstack;
+    string temp = "", result = "";
+ 
+    // Traversing the string
+    for (int i = 0; i < str.length(); i++)
+    {
+        int count = 0;
+ 
+        // If number, convert it into number
+        // and push it into integerstack.
+        if (str[i] >= '0' && str[i] <='9')
+        {
+            while (str[i] >= '0' && str[i] <= '9')
+            {
+                count = count * 10 + str[i] - '0';
+                i++;
+            }
+ 
+            i--;
+            integerstack.push(count);
+        }
+ 
+        // If closing bracket ']', pop element until
+        // '[' opening bracket is not found in the
+        // character stack.
+        else if (str[i] == ']')
+        {
+            temp = "";
+            count = 0;
+ 
+            if (! integerstack.empty())
+            {
+                count = integerstack.top();
+                integerstack.pop();
+            }
+ 
+            while (! stringstack.empty() && stringstack.top()!='[' )
+            {
+                temp = stringstack.top() + temp;
+                stringstack.pop();
+            }
+ 
+            if (! stringstack.empty() && stringstack.top() == '[')
+                stringstack.pop();
+ 
+            // Repeating the popped string 'temo' count
+            // number of times.
+            for (int j = 0; j < count; j++)
+                result = result + temp;
+ 
+            // Push it in the character stack.
+            for (int j = 0; j < result.length(); j++)
+                stringstack.push(result[j]);
+ 
+            result = "";
+        }
+ 
+        // If '[' opening bracket, push it into character stack.
+        else if (str[i] == '[')
+        {
+            if (str[i-1] >= '0' && str[i-1] <= '9')
+                stringstack.push(str[i]);
+ 
+            else
+            {
+                stringstack.push(str[i]);
+                integerstack.push(1);
+            }
+        }
+ 
+        else
+            stringstack.push(str[i]);
+    }
+ 
+    while (! stringstack.empty()){
+        result = stringstack.top() + result;
+        stringstack.pop();
+    }
+ 
+    return result;    
+    }
+};
+
+// { Driver Code Starts.
 
 int main(){
-
-	stack<string> sc;
-	stack<int> st;
-	string s,ans="",upto;
-	sc.push(ans);
-	cin>>s;
-	string times="";
-	for(int i=0;i<s.length();i++){
-		if(s[i]>='0'&&s[i]<='9')
-			times+=s[i];
-		else if(s[i]=='['){
-			st.push(stoi(times));
-			times="";
-			sc.push(s.substr(i,1));
-		}	
-		else if(s[i]>='a'&&s[i]<='z'){
-				sc.push(s.substr(i,1));
-		}
-		else if(s[i]==']'){
-				int t=st.top()-1;st.pop();
-				string rev="";
-				while(sc.top()!="["){
-					rev=sc.top()+rev;sc.pop();
-				}
-				sc.pop();
-				string append=rev;
-
-				while(t--)
-					rev+=append;
-				// cout<<sc.size()<<""<<sc.top()<<"\n";
-				sc.top()+=rev;
-		}
-	}
-
-	cout<<sc.top();
-	// while(!sc.empty()){
-	// 	cout<<sc.top()<<"\n";sc.pop();
-	// }
-	
-
-
-	return 0;
-}
+    int t;
+    cin>>t;
+    while(t--){
+        string s;
+        cin>>s;
+        
+        Solution ob;
+        cout<<ob.decodedString(s)<<"\n";
+    }
+    return 0;
+}  // } Driver Code Ends
