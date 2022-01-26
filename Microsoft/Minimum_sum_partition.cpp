@@ -24,6 +24,8 @@ class Solution{
 	                    dp[i][j]|=dp[i-1][j-arr[i-1]];
 	            }
 	        }
+
+	    
 	    for(int j=tot/2;j>=0;j--){
 	        if(dp[n][j]){
 	            ans=tot-2*j;break;
